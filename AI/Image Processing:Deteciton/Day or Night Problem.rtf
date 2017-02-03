@@ -1,0 +1,105 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fnil\fcharset0 AvenirNext-DemiBold;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red43\green50\blue61;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\sl720
+
+\f0\b\fs54 \cf2 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Digital Camera Autodetect: Day or Night\kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f1\b0\fs24 \cf0 \cb1 \outl0\strokewidth0 \
+#include <cmath>\
+#include <cstdio>\
+#include <vector>\
+#include <iostream>\
+#include <algorithm>\
+#include <climits>\
+#include <sstream>\
+#define h 70\
+using namespace std;\
+int main() \{\
+    //not sure if an unsigned long long can hold 20kb so separate storage here\
+    vector<unsigned long long> r,g,b,rc,gc,bc;\
+    int avg_r, avg_g, avg_b;\
+    unsigned long long red=0,green=0, blue = 0;\
+    unsigned long long rcount = 0;\
+    unsigned long long gcount = 0;\
+    unsigned long long bcount = 0;\
+    int a;\
+    string str;\
+    while(!cin.eof())\{\
+        vector<int> vec;\
+        getline (cin,str);\
+        //cout << str<<endl;\
+        stringstream ss(str);\
+        while (ss >> a)\{\
+            vec.push_back(a);\
+            if (ss.peek() == ',')\
+                ss.ignore();\
+        \}\
+        \
+        if( vec[0] >= ULLONG_MAX-red )\{\
+            r.push_back(red);\
+            rc.push_back(rcount);\
+            red = vec[0];\
+            rcount = 1;\
+        \}else\{ \
+            red += vec[0];\
+            rcount++;\
+         \}\
+        \
+        if(vec[1] >= ULLONG_MAX-green )\{\
+            g.push_back(green);\
+            gc.push_back(gcount);\
+            green = vec[1];\
+            gcount = 1;\
+        \}else\{\
+            green += vec[1];\
+            gcount++;\
+        \}\
+        \
+        if(vec[2] >= ULLONG_MAX-blue )\{\
+            b.push_back(blue);\
+            bc.push_back(bcount);\
+            blue = vec[2];\
+            bcount = 1;\
+        \}else\{\
+            blue += vec[2];\
+            bcount++;\
+        \}\
+        \
+    \}\
+    avg_r = red/rcount;\
+    avg_g = green/gcount;\
+    avg_b = blue/bcount;\
+    //cout<<"avg " << avg_r << " = " << red<<"/"<<rcount<<"     "<<(rc.size()+1)<<endl;\
+    for(int i = 0; i < rc.size(); i++)\{\
+        cout << r[i] << "/"<<rc[i]<<" ";\
+        avg_r+= r[i]/rc[i];\
+        avg_r/=2;\
+    \}//cout<<endl;\
+    \
+    //cout<<"green " << avg_g << " = "<< green<< "/"<<gcount<<"     " <<(gc.size()+1)<<endl;\
+    for(int i = 0; i < gc.size(); i++)\{\
+        cout << g[i] << "/"<<gc[i]<<" ";\
+        avg_g+= g[i]/gc[i];\
+        avg_g/=2;\
+    \}//cout<<endl;\
+    \
+    //cout<<"blue " << avg_b << " = "<<blue<<"/"<< bcount<<"     " <<(bc.size()+1)<<endl;\
+    for(int i = 0; i < bc.size(); i++)\{\
+        cout << b[i] << "/"<<bc[i]<<" ";\
+        avg_b+= b[i]/bc[i];\
+        avg_b/=2;\
+    \}//cout<<endl;\
+    avg_r = avg_r/(rc.size()+1);\
+    avg_g = avg_g/(gc.size()+1);\
+    avg_b = avg_b/(bc.size()+1);\
+    //cout << "averages r/g/b: " << avg_r << "/"<<avg_g<<"/"<<avg_b<<endl;\
+    \
+    if(avg_r <= h && avg_g <= h&&avg_b<=h) cout<< "night";\
+    else cout << "day";\
+    return 0;\
+\}}
